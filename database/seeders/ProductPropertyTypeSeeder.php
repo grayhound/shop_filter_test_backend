@@ -14,6 +14,6 @@ class ProductPropertyTypeSeeder extends Seeder
      */
     public function run()
     {
-        //
+
     }
 }

@@ -6,11 +6,21 @@ use App\Models\CatalogCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Here we seed some test catalog categories
+ */
 class CatalogCategorySeeder extends Seeder
 {
-    private $__category_names = [
-        'Процессоры',
-        'Материнские платы',
+    public static $CATEGORY_NAMES = [
+        'processors' => [
+            'plural' => 'Процессоры',
+            'singular' => 'Процессор',
+        ],
+        /*
+        'motherboards' => [
+            'plural' => 'Материнские платы',
+            'singular' => 'Материнская плата',
+        ],
         'Видеокарты',
         'Оперативная память',
         'Корпуса',
@@ -19,6 +29,7 @@ class CatalogCategorySeeder extends Seeder
         'Твердотельные накопители',
         'Жесткие диски',
         'Мониторы',
+        */
     ];
 
     /**
@@ -28,9 +39,5 @@ class CatalogCategorySeeder extends Seeder
      */
     public function run()
     {
-        // Insert few simple categories
-        foreach ($this->__category_names as $category_name) {
-            CatalogCategory::create(['name' => $category_name]);
-        };
     }
 }

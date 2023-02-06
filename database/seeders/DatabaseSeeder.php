@@ -14,9 +14,5 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            CatalogCategorySeeder::class,
-            ProductPropertySeeder::class,
-        ]);
     }
 }
