@@ -33,7 +33,7 @@ class CreateCatalogSeeder extends Seeder
         $result = [];
 
         foreach (ProductPropertyTypeSeeder::$PROPERTY_TYPES as $category_alias => $property_types) {
-            $result[$category_alias] = new Collection(); // we need a collection since we are having single results
+            $result[$category_alias] = [];
             foreach ($property_types as $property_type_alias => $property_type_properties)  {
                 $product_property_type = ProductPropertyType::create([
                     'name' => $property_type_properties['name'],
@@ -41,7 +41,7 @@ class CreateCatalogSeeder extends Seeder
                     'value_name' => $property_type_properties['value_name'] ?? null,
                 ]);
 
-                $result[$category_alias]->push($product_property_type);
+                $result[$category_alias][$property_type_alias] = $product_property_type;
             }
         }
 
@@ -61,7 +61,8 @@ class CreateCatalogSeeder extends Seeder
             $catalog_category = CatalogCategory::create([
                 'name' => $category_names['plural']
             ]);
-            $catalog_category->propertyTypes()->attach($productPropertyTypes[$category_alias]);
+            $property_type_ids = collect($productPropertyTypes[$category_alias])->pluck('id')->toArray();
+            $catalog_category->propertyTypes()->attach($property_type_ids);
             $result[$category_alias] = $catalog_category;
         };
 
