@@ -7,9 +7,9 @@ use App\Models\CatalogCategory;
 use App\Models\Product;
 use App\Models\ProductProperty;
 use App\Models\ProductPropertyType;
+use Database\Seeders\Helpers\CreateCatalogSeederHelper;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class CreateCatalogSeeder extends Seeder
@@ -66,27 +66,64 @@ class CreateCatalogSeeder extends Seeder
             $result[$categoryAlias] = [];
             foreach ($propertyTypes as $propertyTypeAlias => $propertyTypeProperties) {
                 $result[$categoryAlias][$propertyTypeAlias] = new Collection();
-                if ($propertyTypeProperties['value_type'] === 'enum') {
-                    foreach ($propertyTypeProperties['values'] as $value) {
-                        $productProperty = ProductProperty::create([
-                            'value' => $value,
-                            'product_property_type_id' => $productPropertyTypes[$categoryAlias][$propertyTypeAlias]->id,
-                        ]);
-                        $result[$categoryAlias][$propertyTypeAlias][] = $productProperty;
-                    }
-                }
-                if ($propertyTypeProperties['value_type'] === 'number') {
-                    for ($i = 0; $i < 10; $i++) {
-                        $_value = fake()->randomFloat(2, $propertyTypeProperties['value_range'][0], $propertyTypeProperties['value_range'][1]);
-                        $productProperty = ProductProperty::create([
-                            'value' => $_value,
-                            'value_number' => $_value,
-                            'product_property_type_id' => $productPropertyTypes[$categoryAlias][$propertyTypeAlias]->id,
-                        ]);
-                        $result[$categoryAlias][$propertyTypeAlias][] = $productProperty;
-                    }
-                }
+                $result[$categoryAlias][$propertyTypeAlias] = $this->__createProductPropertyOfType(
+                    $propertyTypeProperties,
+                    $productPropertyTypes[$categoryAlias][$propertyTypeAlias]->id
+                );
             }
+        }
+
+        return $result;
+    }
+
+    private function __createProductPropertyOfType($property, $productPropertyTypeId)
+    {
+        if ($property['value_type'] === 'enum') {
+            return $this->__createProductPropertyOfTypeEnum($property, $productPropertyTypeId);
+        }
+        if ($property['value_type'] === 'number') {
+            return $this->__createProductPropertyOfTypeNumber($property, $productPropertyTypeId);
+        }
+    }
+
+    /**
+     * Create property of type enum.
+     *
+     * @param mixed $property
+     * @param mixed $productPropertyTypeId
+     * @return Collection
+     */
+    private function __createProductPropertyOfTypeEnum($property, $productPropertyTypeId)
+    {
+        $result = new Collection();
+        foreach ($property['values'] as $value) {
+            $productProperty = ProductProperty::create([
+                'value' => $value,
+                'product_property_type_id' => $productPropertyTypeId,
+            ]);
+            $result[] = $productProperty;
+        }
+        return $result;
+    }
+
+    /**
+     * Create property of type number.
+     *
+     * @param mixed $property
+     * @param mixed $productPropertyTypeId
+     * @return Collection
+     */
+    private function __createProductPropertyOfTypeNumber($property, $productPropertyTypeId)
+    {
+        $result = new Collection();
+        for ($i = 0; $i < 10; $i++) {
+            $_value = fake()->randomFloat(2, $property['value_range'][0], $property['value_range'][1]);
+            $productProperty = ProductProperty::create([
+                'value' => $_value,
+                'value_number' => $_value,
+                'product_property_type_id' => $productPropertyTypeId,
+            ]);
+            $result[] = $productProperty;
         }
 
         return $result;
