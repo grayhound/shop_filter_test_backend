@@ -25,4 +25,14 @@ class CatalogCategory extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    /**
+     * Product properties.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function propertyTypes()
+    {
+        return $this->belongsToMany(ProductPropertyType::class, 'catalog_category_to_product_property_types');
+    }
 }
