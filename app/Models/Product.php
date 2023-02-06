@@ -38,6 +38,6 @@ class Product extends Model
      */
     public function properties()
     {
-        return $this->belongsToMany(ProductProperty::class, 'product_to_product_properties');
+        return $this->belongsToMany(ProductProperty::class, 'product_to_product_properties')->withPivot('product_property_type_id');
     }
 }

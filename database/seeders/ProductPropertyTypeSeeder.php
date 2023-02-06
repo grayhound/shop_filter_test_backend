@@ -59,6 +59,7 @@ class ProductPropertyTypeSeeder extends Seeder
                 'name' => 'Частота процессора',
                 'value_type' => 'number',
                 'value_name' => 'Ггц',
+                'value_range' => [1.0, 5.0]
             ]
         ],
     ];

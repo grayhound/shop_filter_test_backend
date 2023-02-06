@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Product property.
@@ -17,7 +19,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProductProperty extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
 
     /**
      * Property type of the property.
