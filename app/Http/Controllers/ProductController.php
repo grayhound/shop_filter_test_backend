@@ -18,6 +18,8 @@ class ProductController extends Controller
     {
         $catalogCategory = CatalogCategory::findOrFail($catalog_category_id);
 
+        $propertyTypes = $catalogCategory->propertyTypes()->get();
+
         $products = Product::where('catalog_category_id', $catalog_category_id)
             ->filters()
             ->defaultSort('id')
@@ -25,6 +27,7 @@ class ProductController extends Controller
 
         $data = [
             'catalog_category_id' => $catalog_category_id,
+            'property_types' => $propertyTypes,
             'products' => $products,
         ];
 

@@ -16,11 +16,11 @@ class Product extends Model
     use HasFactory, HasUuids, SoftDeletes, Filterable;
 
     /**
-     * The attributes that should be hidden for arrays.
+     * Visible fields
      *
      * @var array
      */
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'catalog_category_id',];
+    protected $visible = ['id', 'name', 'price',];
 
     /**
      * @var array

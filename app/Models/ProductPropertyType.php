@@ -27,6 +27,13 @@ class ProductPropertyType extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     /**
+     * Visible fields
+     *
+     * @var array
+     */
+    protected $visible = ['id', 'name', 'value_type',];
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
