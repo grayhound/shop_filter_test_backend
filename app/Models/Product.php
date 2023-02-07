@@ -6,13 +6,29 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Orchid\Filters\Filterable;
 
 /**
  * Summary of Product
  */
 class Product extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes, Filterable;
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'catalog_category_id',];
+
+    /**
+     * @var array
+     */
+    protected $allowedSorts = [
+        'id',
+        'price',
+    ];
 
     /**
      * Indicates if the model should be timestamped.

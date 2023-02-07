@@ -17,4 +17,6 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/catalog.php';
+
+require __DIR__ . '/auth.php';

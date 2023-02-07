@@ -7,7 +7,6 @@ use App\Models\CatalogCategory;
 use App\Models\Product;
 use App\Models\ProductProperty;
 use App\Models\ProductPropertyType;
-use Database\Seeders\Helpers\CreateCatalogSeederHelper;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -76,6 +75,13 @@ class CreateCatalogSeeder extends Seeder
         return $result;
     }
 
+    /**
+     * Create product property of type.
+     *
+     * @param mixed $property
+     * @param mixed $productPropertyTypeId
+     * @return Collection
+     */
     private function __createProductPropertyOfType($property, $productPropertyTypeId)
     {
         if ($property['value_type'] === 'enum') {
