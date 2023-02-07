@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CatalogCategory;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -12,9 +14,14 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function list($catalog_category_id): JsonResponse
+    public function list($catalog_category_id, Request $request): JsonResponse
     {
-        $products = Product::filters()->defaultSort('id')->paginate();
+        $catalogCategory = CatalogCategory::findOrFail($catalog_category_id);
+
+        $products = Product::where('catalog_category_id', $catalog_category_id)
+            ->filters()
+            ->defaultSort('id')
+            ->paginate(30);
 
         $data = [
             'catalog_category_id' => $catalog_category_id,
