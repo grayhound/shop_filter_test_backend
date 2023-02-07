@@ -31,7 +31,9 @@ class ProductPropertyType extends Model
      *
      * @var array
      */
-    protected $visible = ['id', 'name', 'value_type',];
+    protected $visible = ['id', 'name', 'value_type', 'properties',];
+
+    protected $with = array('properties');
 
     /**
      * Indicates if the model should be timestamped.
@@ -45,7 +47,7 @@ class ProductPropertyType extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function productProperties()
+    public function properties()
     {
         return $this->hasMany(ProductProperty::class);
     }
