@@ -28,6 +28,7 @@ class Product extends Model
     protected $allowedSorts = [
         'id',
         'price',
+        'name',
     ];
 
     /**

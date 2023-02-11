@@ -31,9 +31,11 @@ class ProductPropertyType extends Model
      *
      * @var array
      */
-    protected $visible = ['id', 'name', 'value_type', 'properties',];
+    protected $visible = ['id', 'name', 'value_type', 'properties_k'];
 
-    protected $with = array('properties');
+    protected $with = array('properties',);
+
+    protected $appends = ['properties_k'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -45,10 +47,19 @@ class ProductPropertyType extends Model
     /**
      * Available properties for the type.
      *
+     * Properties are sorted by "value".
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function properties()
     {
         return $this->hasMany(ProductProperty::class);
+    }
+
+    public function getPropertiesKAttribute()
+    {
+        if ($this->value_type === 'enum') {
+            return $this->properties()->orderByRaw('LENGTH(value) ASC')->orderBy('value', 'ASC')->get();
+        }
+        return null;
     }
 }
