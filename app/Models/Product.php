@@ -23,6 +23,15 @@ class Product extends Model
     protected $visible = ['id', 'name', 'price',];
 
     /**
+     * Summary of allowedFilters
+     *
+     * @var mixed
+     */
+    protected $allowedFilters = [
+        'id',
+    ];
+
+    /**
      * @var array
      */
     protected $allowedSorts = [

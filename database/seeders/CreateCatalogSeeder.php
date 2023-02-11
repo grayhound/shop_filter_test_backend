@@ -166,17 +166,19 @@ class CreateCatalogSeeder extends Seeder
     {
         $result = [];
         foreach ($catalogCategories as $categoryAlias => $catalogCategory) {
-            $_randomProperties = [];
-            $productPropertyTypesOfCategory = $productProperties[$categoryAlias];
-            foreach ($productPropertyTypesOfCategory as $productPropertyTypeAlias => $productProperties) {
-                $_randomProperty = $productProperties->random();
-                $_randomProperties[] = $_randomProperty;
-            }
-
             $products = new Collection();
 
-            DB::beginTransaction();
             for ($i = 0; $i < 1000; $i++) {
+
+
+                $_randomProperties = [];
+                $productPropertyTypesOfCategory = $productProperties[$categoryAlias];
+                foreach ($productPropertyTypesOfCategory as $productPropertyTypeAlias => $productPropertiesItem) {
+                    $_randomProperty = $productPropertiesItem->random();
+                    $_randomProperties[] = $_randomProperty;
+                }
+
+
                 $product = Product::factory()
                     ->for($catalogCategory)
                     ->create();
@@ -187,7 +189,6 @@ class CreateCatalogSeeder extends Seeder
                     );
                 }
             }
-            DB::commit();
 
             $result[$categoryAlias] = $products;
         }

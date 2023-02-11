@@ -55,6 +55,13 @@ class ProductPropertyType extends Model
         return $this->hasMany(ProductProperty::class);
     }
 
+    /**
+     * Return properties. We return `null` for `number` type, cause there can be hundreds of those values.
+     *
+     * @TODO return MIN and MAX values for number as a property.
+     *
+     * @return \Illuminate\Support\Collection|null
+     */
     public function getPropertiesAttribute()
     {
         if ($this->value_type === 'enum') {

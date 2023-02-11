@@ -19,24 +19,35 @@ class ProductController extends Controller
      */
     public function list($catalog_category_id): JsonResponse
     {
+        DB::enableQueryLog();
+        // get catalog category (or fail)
         $catalogCategory = CatalogCategory::findOrFail($catalog_category_id);
 
-        $products = Product::where('catalog_category_id', $catalog_category_id)
+        // get products for this category
+        $products = $catalogCategory->products()->where('catalog_category_id', $catalog_category_id)
             ->filters()
             ->defaultSort('id')
             ->paginate(30);
 
+        // get property types attached to the catalog category
         $propertyTypes = $catalogCategory->propertyTypes()->get();
 
-        // var_dump($propertyTypes[0]->correctProperties()->get);
-        // die();
+        // Alright here's the deal...
+        $products = $products->where('properties.id', '9870d8e4-6d1a-40f8-83f0-f327fc8a579b');
+        // var_dump(dd($products));
+        var_dump(DB::getQueryLog());
+        DB::disableQueryLog();
 
+        // End of the deal...
+
+        // prepare data to return
         $data = [
-            'catalog_category_id' => $catalog_category_id,
-            'property_types' => $propertyTypes,
+            // 'catalog_category_id' => $catalog_category_id,
             'products' => $products,
+            // 'property_types' => $propertyTypes,
         ];
 
+        // And return data!
         return response()->json($data);
     }
 
