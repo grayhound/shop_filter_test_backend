@@ -82,6 +82,13 @@ class ProductController extends Controller
         return $queries;
     }
 
+    /**
+     * Вообще весьма странно, что есть UNION, а INTERSECT приходится имитировать.
+     *
+     * Ну да ладно, что я, SQL не объединю.
+     *
+     * Вспомнил же как фильтры делать.
+     */
     private function __prepareIntersectionSqlFromQuerys($filtersQueries)
     {
         $prepareSqlQueries = [];
