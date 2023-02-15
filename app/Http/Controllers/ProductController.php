@@ -14,10 +14,14 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * Show product for catalog category.
+     * And show property types for this category.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param string $catalog_category_id
+     *
+     * @return JsonResponse
      */
     public function list($catalog_category_id): JsonResponse
     {
@@ -28,7 +32,7 @@ class ProductController extends Controller
         $propertyTypes = $catalogCategory->propertyTypes()->get();
 
         // get filters from request
-        $filters = Request()->get('filter');
+        $filters = Request()->get('filter', []);
 
         // get products for this category
         $products = $this->__getProducts($catalog_category_id, $propertyTypes, $filters);
@@ -66,6 +70,11 @@ class ProductController extends Controller
 
     /**
      * Get list of queries to filter by properties.
+     *
+     * @param array $propertyTypes
+     * @param array $filters
+     *
+     * @return array
      */
     private function __getFiltersQuery($propertyTypes, $filters)
     {
@@ -88,6 +97,9 @@ class ProductController extends Controller
      * Ну да ладно, что я, SQL не объединю.
      *
      * Вспомнил же как фильтры делать.
+     *
+     * @param array $filtersQueries
+     * @return string
      */
     private function __prepareIntersectionSqlFromQuerys($filtersQueries)
     {
