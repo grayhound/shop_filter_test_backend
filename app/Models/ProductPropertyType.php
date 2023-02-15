@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Collections\ProductPropertyTypesCollection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,6 +52,17 @@ class ProductPropertyType extends Model
     public $timestamps = true;
 
     /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array  $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new ProductPropertyTypesCollection($models);
+    }
+
+    /**
      * Available properties for the type.
      *
      * Properties are sorted by "value".
@@ -80,5 +92,20 @@ class ProductPropertyType extends Model
         $this->__cachePropeties = $properties;
 
         return $this->__cachePropeties;
+    }
+
+    /**
+     * Return searchable array
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'value_type' => $this->value_type,
+            'value_name' => $this->value_name,
+        ];
     }
 }

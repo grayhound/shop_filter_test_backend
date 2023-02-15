@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Orchid\Filters\Filterable;
 
 /**
@@ -14,7 +15,7 @@ use Orchid\Filters\Filterable;
  */
 class Product extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes, Filterable;
+    use HasFactory, HasUuids, SoftDeletes, Filterable, Searchable;
 
     /**
      * Visible fields
@@ -49,6 +50,22 @@ class Product extends Model
     public $timestamps = true;
 
     /**
+     * Get the indexable data array for the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'price' => (float) $this->price,
+            'catalog_category_id' => $this->catalog_category_id,
+            'properties' => $this->propertiesToSearchableArray(),
+        ];
+    }
+
+    /**
      * Catalog category than product belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -66,5 +83,25 @@ class Product extends Model
     public function propertiesRelation()
     {
         return $this->belongsToMany(ProductProperty::class, 'product_to_product_properties')->withPivot('product_property_type_id');
+    }
+
+    /**
+     * Convert properties to searchable array
+     *
+     * @return array
+     */
+    public function propertiesToSearchableArray(): array
+    {
+        return $this->propertiesRelation()->get()->toSearchableArray();
+    }
+
+    /**
+     * Product properties.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function propertyTypesRelation()
+    {
+        return $this->belongsToMany(ProductPropertyType::class, 'product_to_product_properties')->withPivot('product_property_type_id');
     }
 }
