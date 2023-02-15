@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProductPropertyType extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
+
+    /**
+     * @var Collection
+     */
+    private $__cachePropeties = null;
 
     /**
      * Visible fields
@@ -64,9 +70,15 @@ class ProductPropertyType extends Model
      */
     public function getPropertiesAttribute()
     {
-        if ($this->value_type === 'enum') {
-            return $this->propertiesRelation()->orderByRaw('LENGTH(value) ASC')->orderBy('value', 'ASC')->get();
+        if ($this->__cachePropeties) {
+            return $this->__cachePropeties;
         }
-        return null;
+        $properties = [];
+        if ($this->value_type === 'enum') {
+            $properties = $this->propertiesRelation()->orderByRaw('LENGTH(value) ASC')->orderBy('value', 'ASC')->get();
+        }
+        $this->__cachePropeties = $properties;
+
+        return $this->__cachePropeties;
     }
 }
